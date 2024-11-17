@@ -17,3 +17,6 @@
     * Loopback0 - 10.Dn.S(L)n.X/32, где Dn - номер сети ЦОДа, S(L)n - номер Spine (Leaf), X = 1 для Spine, X = 2 для Leaf;
     * Loopback1 - 10.Dn+1.S(L)n.X/32, где Dn - номер сети ЦОДа, S(L)n - номер Spine (Leaf), X = 1 для Spine, X = 2 для Leaf;
     * P2P Links Spine-Leaf - 10.Dn+2.Sn.X/31, где Dn - номер сети ЦОДа, Sn - номер Spine, X = (Ln-1)*2, где Ln - номер Leaf
+    * Резерв - 10.Dn+3.0.0/16, Dn - номер сети ЦОДа
+    * Сервисы - 10.Dn+4.0.0/14, где Dn - номер сети ЦОДа
+  ## **Конфигурация устройств**
