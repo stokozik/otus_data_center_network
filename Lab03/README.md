@@ -19,4 +19,49 @@
     * P2P Links Spine-Leaf - 10.Dn+2.Sn.X/31, где Dn - номер сети ЦОДа, Sn - номер Spine, X = (Ln-1)*2, где Ln - номер Leaf
     * Резерв - 10.Dn+3.0.0/16, Dn - номер сети ЦОДа
     * Сервисы - 10.Dn+4.0.0/14, где Dn - номер сети ЦОДа
-  ## **Конфигурация устройств**
+  ## **Конфигурация устройств (на примере Spine1 и Leaf1):**
+#### Spine1:
+```
+hostname Spine1
+!
+interface Ethernet1
+   description -=p2p_Leaf1=-
+   no switchport
+   ip address 10.2.1.0/31
+!
+interface Ethernet2
+   description -=p2p_Leaf2=-
+   no switchport
+   ip address 10.2.1.2/31
+!
+interface Ethernet3
+   description -=p2p_Leaf3=-
+   no switchport
+   ip address 10.2.1.4/31
+!
+interface Loopback0
+   ip address 10.0.1.1/32
+!
+interface Loopback1
+   ip address 10.1.1.1/32
+   ```
+#### Leaf1:
+```
+hostname Leaf1
+!
+interface Ethernet1
+   description -=p2p_Spine1=-
+   no switchport
+   ip address 10.2.1.1/31
+!
+interface Ethernet2
+   description -=p2p_Spine2=-
+   no switchport
+   ip address 10.2.2.1/31
+!
+interface Loopback0
+   ip address 10.0.1.2/32
+!
+interface Loopback1
+   ip address 10.1.1.2/32
+```
