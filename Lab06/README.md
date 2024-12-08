@@ -13,7 +13,7 @@
 ## **Выполнение работы:**
 1. Настраиваем адресацию интерфейсов устройств согласно таблицы:
 ![alt text](image-1.png)
-2. Создаем IS-IS процесс на каждом коммутаторе, указываем router-id равный ip адресу loopback интерфейса, указываем на каждом маршрутизаторе NET вида 49.xxxx.nnnn.nnnn.nnnn.00, где xxxx - номер Area (0001) nnnn.nnnn.nnnn - router id (адрес loopback0 дополненный нулями), глобально указываем тип area L1, настраиваем address family ipv4 unicast, включаем bfd:
+2. Создаем IS-IS процесс на каждом коммутаторе, указываем router-id равный ip адресу loopback интерфейса, указываем на каждом маршрутизаторе NET вида 49.xxxx.nnnn.nnnn.nnnn.00, где xxxx - номер Area (0001) nnnn.nnnn.nnnn - router id (адрес loopback0 дополненный нулями), глобально указываем тип маршрутизатора L1, настраиваем address family ipv4 unicast, включаем bfd:
 ```
 Spine 1:
 
