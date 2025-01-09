@@ -52,7 +52,7 @@ interface Vxlan1
    vxlan vlan 100 vni 1100
 
 ```
-4. Настраиваем Address Family evpn на всех устройствам, на Leaf в процессе BGP настраиваем route destignisher, route target import и route target export, а также указываем редистибутить learned mac адреса:
+4. Настраиваем Address Family evpn на всех устройствам, на Leaf в процессе BGP настраиваем route destignisher, route target import и route target export, а также указываем редистибутить learned mac адреса для VLAN 100:
 ```
 Spine 2:
 
