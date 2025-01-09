@@ -53,11 +53,8 @@ route-map Import_Direct permit 10
    match ip address prefix-list Import_Direct
 !
 router bgp 65001
-   vpn layer-3 export paths all
    router-id 10.0.1.1
    timers bgp 3 9
-   bgp allowas-in
-   bgp advertise-inactive
    neighbor Leaf peer group
    neighbor Leaf remote-as 65001
    neighbor Leaf route-reflector-client
