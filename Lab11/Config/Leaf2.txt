@@ -6,11 +6,14 @@ no aaa root
 !
 transceiver qsfp default-mode 4x10G
 !
-service routing protocols model ribd
+service routing protocols model multi-agent
 !
 hostname Leaf2
 !
 spanning-tree mode mstp
+!
+vlan 100
+   name VNI-1100
 !
 interface Ethernet1
    description -=p2p_Spine1=-
@@ -23,6 +26,7 @@ interface Ethernet2
    ip address 10.2.2.3/31
 !
 interface Ethernet3
+   switchport access vlan 100
 !
 interface Ethernet4
 !
@@ -42,6 +46,11 @@ interface Loopback1
 !
 interface Management1
 !
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 100 vni 1100
+!
 ip routing
 !
 route-map Import_Connected permit 10
@@ -55,10 +64,19 @@ router bgp 65001
    maximum-paths 2
    neighbor Spine peer group
    neighbor Spine remote-as 65001
-   neighbor Spine bfd
    neighbor Spine password 7 ORZL65NaJ0uIN5uX41Yy2Q==
+   neighbor Spine send-community extended
    neighbor 10.2.1.2 peer group Spine
    neighbor 10.2.2.2 peer group Spine
    redistribute connected route-map Import_Connected
+   !
+   vlan 100
+      rd auto
+      route-target export auto
+      route-target import auto 65001
+      redistribute learned
+   !
+   address-family evpn
+      neighbor Spine activate
 !
 end

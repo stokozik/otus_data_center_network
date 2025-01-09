@@ -6,7 +6,7 @@ no aaa root
 !
 transceiver qsfp default-mode 4x10G
 !
-service routing protocols model ribd
+service routing protocols model multi-agent
 !
 hostname Spine2
 !
@@ -48,17 +48,25 @@ interface Management1
 !
 ip routing
 !
+ip prefix-list Import_Direct seq 10 permit 10.2.2.0/24 eq 31
+!
+route-map Import_Direct permit 10
+   match ip address prefix-list Import_Direct
+!
 router bgp 65001
    router-id 10.0.2.1
    timers bgp 3 9
    neighbor Leaf peer group
    neighbor Leaf remote-as 65001
-   neighbor Leaf next-hop-self
-   neighbor Leaf bfd
    neighbor Leaf route-reflector-client
    neighbor Leaf password 7 LPaYUKVuzesyD+boXlQBAw==
    neighbor 10.2.2.1 peer group Leaf
    neighbor 10.2.2.3 peer group Leaf
    neighbor 10.2.2.5 peer group Leaf
+   redistribute connected route-map Import_Direct
+   !
+   address-family evpn
+      neighbor Leaf activate
+      neighbor Leaf next-hop-unchanged
 !
 end
