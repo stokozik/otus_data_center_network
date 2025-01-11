@@ -239,6 +239,7 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  * >      RD: 10.1.3.2:1 ip-prefix 10.10.12.0/24
                                  10.1.3.2              -       100     0       i Or-ID: 10.0.3.2 C-LST: 10.0.1.1 
  * >      RD: 10.1.3.2:1 ip-prefix 10.10.13.0/24
-                                 10.1.3.2              -       100     0       i Or-ID: 10.0.3.2 C-LST: 10.0.1.1                              
+                                 10.1.3.2              -       100     0       i Or-ID: 10.0.3.2 C-LST: 10.0.1.1    
+                                                           
 ```
 
