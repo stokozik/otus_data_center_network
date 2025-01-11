@@ -241,5 +241,28 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  * >      RD: 10.1.3.2:1 ip-prefix 10.10.13.0/24
                                  10.1.3.2              -       100     0       i Or-ID: 10.0.3.2 C-LST: 10.0.1.1    
 
+Leaf1#show ip route vrf L3
+
+VRF: L3
+Codes: C - connected, S - static, K - kernel, 
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        10.10.10.0/24 is directly connected, Vlan100
+ B I      10.10.11.0/24 [200/0] via VTEP 10.1.2.2 VNI 10000 router-mac 50:ec:60:2e:00:ef local-interface Vxlan1
+ B I      10.10.12.0/24 [200/0] via VTEP 10.1.3.2 VNI 10000 router-mac 50:91:e1:75:5f:e2 local-interface Vxlan1
+ B I      10.10.13.0/24 [200/0] via VTEP 10.1.3.2 VNI 10000 router-mac 50:91:e1:75:5f:e2 local-interface Vxlan1
+ 
 ```
+
 
