@@ -365,7 +365,7 @@ router bgp 65001
    б) запрещаем анонс маршрутов Client3 в сторону Client1 и Client2;
 
    в) так как Leaf4 не примет анонсы в которых будет его номер AS (65001), то подменяем номер AS при анонсе в сторону Leaf4 на свой (65101) для всех BGP соседств
-   
+
 Настраиваем BGP пиринг, для Client3 анонсируем дефолтный маршрут:
 
 ```
@@ -534,15 +534,29 @@ Leaf3#show ip route vrf Client_3
 
 VRF: Client_3
 Codes: C - connected, S - static, K - kernel, 
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external typ
+e 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external typ
+e 1,
        N2 - OSPF NSSA external type2, B - Other BGP Routes,
        B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summ
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate
+,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort:
+ B I      0.0.0.0/0 [200/0] via VTEP 10.1.4.2 VNI 10003 route
+r-mac 50:44:c5:ed:31:74 local-interface Vxlan1
+
+ C        172.16.3.0/24 is directly connected, Vlan103
+```
 
 Убеждаемся в наличии route-type 5 маршрутов:
-
+```
 Leaf3#show bgp evpn route-type ip-prefix ipv4
 BGP routing table information for VRF default
 Router identifier 10.0.3.2, local AS number 65001
