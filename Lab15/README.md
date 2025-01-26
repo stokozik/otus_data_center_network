@@ -269,6 +269,7 @@ hable)
 
 ```
 Убеждаемся, что на Лифах в VRF присутствуют только connected сети и Host роуты полученные по EVPN:
+```
 Leaf1#show ip route vrf Client_2
 
 VRF: Client_2
@@ -289,7 +290,7 @@ Gateway of last resort is not set
  B I      172.16.2.3/32 [200/0] via VTEP 10.1.2.2 VNI 10002 router-mac 50:8a:59:1b:ea:ee loc
 al-interface Vxlan1
  C        172.16.2.0/24 is directly connected, Vlan101
-
+```
 5. Настраиваем Leaf4 в качестве Border Leaf:
 
 Добавляем все VRF между которыми необходима маршрутизация или которым необходим доступ во внешние сети, создаем сабинтерфейсы для пиринга с Border, настраиваем BGP для соответствующих VRF:
