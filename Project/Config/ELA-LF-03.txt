@@ -1,0 +1,192 @@
+! device: ELA-LF-03 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname ELA-LF-03
+!
+spanning-tree mode mstp
+!
+vlan 101
+   name VNI1101
+!
+vlan 102
+   name VNI1102
+!
+vlan 103
+   name VNI1103
+!
+vlan 104
+   name VNI1104
+!
+vrf instance Server_Group_1
+!
+vrf instance Server_Group_2
+!
+vrf instance Server_Group_3
+!
+interface Port-Channel1
+   lacp system-id 50ab.7a57.0c21
+!
+interface Ethernet1
+   description -=p2p_Spine2=-
+   no switchport
+   ip address 10.10.2.5/31
+!
+interface Ethernet2
+   description -=p2p_Spine1=-
+   no switchport
+   ip address 10.10.1.5/31
+!
+interface Ethernet3
+   no switchport
+!
+interface Ethernet3.1101
+   encapsulation dot1q vlan 1101
+   vrf Server_Group_1
+   ip address 172.16.201.1/31
+!
+interface Ethernet3.1102
+   encapsulation dot1q vlan 1102
+   vrf Server_Group_2
+   ip address 172.16.201.3/31
+!
+interface Ethernet3.1103
+   encapsulation dot1q vlan 1103
+   vrf Server_Group_3
+   ip address 172.16.201.5/31
+!
+interface Ethernet4
+   switchport access vlan 102
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback0
+   ip address 10.8.3.2/32
+!
+interface Loopback1
+   ip address 10.9.3.2/32
+!
+interface Management1
+!
+interface Vlan101
+   vrf Server_Group_1
+   ip address 10.20.1.8/24
+   ip virtual-router address 10.20.1.1
+!
+interface Vlan102
+   vrf Server_Group_2
+   ip address 10.20.2.8/24
+   ip virtual-router address 10.20.2.1
+!
+interface Vlan103
+   vrf Server_Group_3
+   ip address 10.20.3.8/24
+   ip virtual-router address 10.20.3.1
+!
+interface Vlan104
+   vrf Server_Group_1
+   ip address 10.20.4.8/24
+   ip virtual-router address 10.20.4.1
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 101 vni 1101
+   vxlan vlan 102 vni 1102
+   vxlan vlan 103 vni 1103
+   vxlan vrf Server_Group_1 vni 11101
+   vxlan vrf Server_Group_2 vni 11102
+   vxlan vrf Server_Group_3 vni 11103
+!
+ip virtual-router mac-address 00:01:aa:a1:aa:a1
+!
+ip routing
+ip routing vrf Server_Group_1
+ip routing vrf Server_Group_2
+ip routing vrf Server_Group_3
+!
+route-map Import_Connected permit 10
+   match interface Loopback0
+!
+route-map Import_Connected permit 20
+   match interface Loopback1
+!
+router bgp 65203
+   router-id 10.8.3.2
+   maximum-paths 2
+   neighbor Spine peer group
+   neighbor Spine remote-as 65002
+   neighbor Spine password 7 cvxnRM6ECvqiRRVq05gzqn3sC8FZTVbY
+   neighbor Spine_lo peer group
+   neighbor Spine_lo remote-as 65002
+   neighbor Spine_lo update-source Loopback0
+   neighbor Spine_lo ebgp-multihop 2
+   neighbor Spine_lo password 7 kdTaBtWkPJjFehLXW2l23U7GUnXndnrV
+   neighbor Spine_lo send-community extended
+   neighbor 10.8.1.1 peer group Spine_lo
+   neighbor 10.8.2.1 peer group Spine_lo
+   neighbor 10.10.1.4 peer group Spine
+   neighbor 10.10.2.4 peer group Spine
+   redistribute connected route-map Import_Connected
+   !
+   vlan 101
+      rd auto
+      route-target both 65000:101
+      redistribute learned
+   !
+   vlan 102
+      rd auto
+      route-target both 65000:102
+      redistribute learned
+   !
+   vlan 103
+      rd auto
+      route-target both 65000:103
+      redistribute learned
+   !
+   vlan 104
+      rd auto
+      route-target both 65000:104
+      redistribute learned
+   !
+   address-family evpn
+      no neighbor Spine activate
+      neighbor Spine_lo activate
+   !
+   address-family ipv4
+      no neighbor Spine_lo activate
+   !
+   vrf Server_Group_1
+      rd 10.9.3.2:1
+      route-target import evpn 1:11101
+      route-target export evpn 1:11101
+      neighbor 172.16.201.0 remote-as 65201
+      redistribute connected
+   !
+   vrf Server_Group_2
+      rd 10.9.3.2:2
+      route-target import evpn 1:11102
+      route-target export evpn 1:11102
+      neighbor 172.16.201.2 remote-as 65201
+      redistribute connected
+   !
+   vrf Server_Group_3
+      rd 10.9.3.2:3
+      route-target import evpn 1:11103
+      route-target export evpn 1:11103
+      neighbor 172.16.201.4 remote-as 65201
+      redistribute connected
+!
+end

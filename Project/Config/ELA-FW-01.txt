@@ -1,0 +1,91 @@
+! device: ELA-FW-01 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname ELA-FW-01
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   no switchport
+!
+interface Ethernet1.1101
+   encapsulation dot1q vlan 1101
+   ip address 172.16.201.0/31
+!
+interface Ethernet1.1102
+   encapsulation dot1q vlan 1102
+   ip address 172.16.201.2/31
+!
+interface Ethernet1.1103
+   encapsulation dot1q vlan 1103
+   ip address 172.16.201.4/31
+!
+interface Ethernet2
+   no switchport
+   ip address 172.16.221.1/31
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Management1
+!
+ip routing
+!
+ip prefix-list Server_Group1_in seq 10 permit 10.20.1.0/24 eq 24
+ip prefix-list Server_Group1_out seq 10 permit 10.20.2.0/24
+ip prefix-list Server_Group1_out seq 20 permit 0.0.0.0/0
+ip prefix-list Server_Group2_in seq 10 permit 10.20.2.0/24 eq 24
+ip prefix-list Server_Group2_out seq 10 permit 10.20.1.0/24
+ip prefix-list Server_Group2_out seq 20 permit 0.0.0.0/0
+ip prefix-list Server_Group3_in seq 10 permit 10.20.3.0/24 eq 24
+ip prefix-list Server_Group3_out seq 20 permit 0.0.0.0/0
+!
+route-map Server_Group1_in permit 10
+   match ip address prefix-list Server_Group1_in
+!
+route-map Server_Group1_out permit 20
+   match ip address prefix-list Server_Group1_out
+   set as-path match all replacement auto
+!
+route-map Server_Group2_in permit 10
+   match ip address prefix-list Server_Group2_in
+!
+route-map Server_Group2_out permit 20
+   match ip address prefix-list Server_Group2_out
+   set as-path match all replacement auto
+!
+route-map Server_Group3_in permit 10
+   match ip address prefix-list Server_Group3_in
+!
+route-map Server_Group3_out permit 20
+   match ip address prefix-list Server_Group3_out
+!
+router bgp 65201
+   neighbor 172.16.201.1 remote-as 65203
+   neighbor 172.16.201.1 route-map Server_Group1_in in
+   neighbor 172.16.201.1 route-map Server_Group1_out out
+   neighbor 172.16.201.3 remote-as 65203
+   neighbor 172.16.201.3 route-map Server_Group2_in in
+   neighbor 172.16.201.3 route-map Server_Group2_out out
+   neighbor 172.16.201.5 remote-as 65203
+   neighbor 172.16.201.5 route-map Server_Group3_in in
+   neighbor 172.16.201.5 route-map Server_Group3_out out
+   neighbor 172.16.221.0 remote-as 65300
+!
+end

@@ -1,0 +1,50 @@
+! device: ISP (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname ISP
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   no switchport
+   ip address 172.16.220.0/31
+!
+interface Ethernet2
+   no switchport
+   ip address 172.16.221.0/31
+!
+interface Ethernet3
+   no switchport
+   ip address 8.8.8.1/24
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Management1
+!
+ip routing
+!
+ip route 0.0.0.0/0 Null0
+!
+router bgp 65300
+   maximum-paths 2
+   neighbor 172.16.220.1 remote-as 65200
+   neighbor 172.16.220.1 default-originate always
+   neighbor 172.16.221.1 remote-as 65201
+   neighbor 172.16.221.1 default-originate always
+!
+end
